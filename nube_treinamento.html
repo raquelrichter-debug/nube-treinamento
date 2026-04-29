@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nube — Treinamento SBV Completo</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--lar:#ec6839;--lar2:#f39325;--verde:#2fa466;--lima:#95c23d;--amar:#fdc533;--roxo:#6c3fc5;--preto:#1a1a1a;--cinza:#f4f3ef;--branco:#fff;--borda:#e8e6e0}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--cinza);color:var(--preto)}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:255px;background:var(--preto);display:flex;flex-direction:column;z-index:100;overflow-y:auto;transition:transform .3s}
+.sb-logo{padding:18px 18px 12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-logo .lt{font-size:21px;font-weight:900;color:var(--amar)}.sb-logo .lt span{color:var(--lar)}
+.sb-logo p{font-size:9px;color:rgba(255,255,255,.35);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
+.ns{padding:10px 12px 3px;font-size:9px;font-weight:700;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.1em}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;border-radius:8px;margin:1px 6px;font-size:12px;font-weight:500;color:rgba(255,255,255,.58);transition:all .18s;text-decoration:none}
+.ni:hover{background:rgba(255,255,255,.07);color:var(--branco)}.ni.active{background:var(--lar);color:var(--branco);font-weight:700}
+.ni-ic{font-size:13px;width:16px;text-align:center;flex-shrink:0}
+.ni-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.12);margin-left:auto;flex-shrink:0;transition:background .3s}
+.ni.active .ni-dot{background:rgba(255,255,255,.38)}.ni.done .ni-dot{background:var(--verde)}
+.sb-score{margin:auto 10px 12px;background:rgba(255,255,255,.06);border-radius:11px;padding:13px 14px;text-align:center}
+.sn{font-size:30px;font-weight:900;color:var(--amar)}.sl{font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.08em}
+.sb-track{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:7px}
+.sb-fill{height:100%;background:var(--verde);border-radius:2px;transition:width .6s ease}
+#hbg{display:none;position:fixed;top:11px;left:11px;z-index:200;width:40px;height:40px;background:var(--preto);border:none;border-radius:10px;cursor:pointer;align-items:center;justify-content:center;font-size:18px;color:var(--amar)}
+#main{margin-left:255px;min-height:100vh}
+.page{display:none;animation:fu .32s ease}.page.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.hero{background:var(--preto);padding:44px 36px 36px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:var(--lar);opacity:.13}
+.hbadge{display:inline-flex;align-items:center;gap:5px;background:var(--lar);color:var(--branco);padding:4px 13px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:12px}
+.hero h1{font-size:clamp(22px,4vw,36px);font-weight:900;color:var(--branco);line-height:1.18;margin-bottom:7px}
+.hero h1 span{color:var(--amar)}.hero p{font-size:13px;color:rgba(255,255,255,.58);max-width:500px;line-height:1.65}
+.hpills{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px}
+.hp{padding:4px 13px;border-radius:20px;font-size:10px;font-weight:700;color:var(--branco)}
+.ct{padding:28px 36px 56px;max-width:840px}
+.card{background:var(--branco);border-radius:13px;padding:18px 20px;margin-bottom:12px;border-left:4px solid var(--lar);box-shadow:0 2px 9px rgba(0,0,0,.055);animation:fu .38s ease both}
+.card:nth-child(2){border-color:var(--verde);animation-delay:.04s}.card:nth-child(3){border-color:var(--roxo);animation-delay:.08s}
+.card:nth-child(4){border-color:var(--lar2);animation-delay:.12s}.card:nth-child(5){border-color:var(--lima);animation-delay:.16s}
+.card:nth-child(6){border-color:var(--verde);animation-delay:.20s}.card:nth-child(7){border-color:var(--lar);animation-delay:.24s}
+.card:nth-child(8){border-color:var(--roxo);animation-delay:.28s}.card:nth-child(9){border-color:var(--lar2);animation-delay:.32s}
+.card:nth-child(10){border-color:var(--lima);animation-delay:.36s}.card:nth-child(11){border-color:var(--lar);animation-delay:.40s}
+.card:nth-child(12){border-color:var(--verde);animation-delay:.44s}
+.ch{display:flex;align-items:flex-start;gap:12px;margin-bottom:9px}
+.ci{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:19px}
+.ct2{font-size:14px;font-weight:700;line-height:1.3}.cs{font-size:11px;color:rgba(26,26,26,.5);margin-top:1px}
+.card p{font-size:12.5px;color:#444;line-height:1.65}
+.fala{background:var(--cinza);border-radius:9px;padding:9px 13px;margin-top:9px;border-left:3px solid var(--lar);font-size:12px;font-style:italic;color:#555;line-height:1.6}
+.cl{list-style:none;margin-top:9px}.cl li{display:flex;align-items:flex-start;gap:7px;font-size:12.5px;color:#444;margin-bottom:5px;line-height:1.5}
+.cl li::before{content:'✓';color:var(--verde);font-weight:700;flex-shrink:0;margin-top:1px}
+.cl li.w::before{content:'⚠';color:var(--lar)}.cl li.s::before{content:'★';color:var(--amar)}
+.alert{border-radius:11px;padding:14px 16px;margin-bottom:14px;display:flex;gap:11px;align-items:flex-start}
+.ai{font-size:21px;flex-shrink:0;margin-top:1px}.alert strong{display:block;font-size:12.5px;font-weight:700;margin-bottom:3px}
+.alert p{font-size:11.5px;line-height:1.6;opacity:.9}
+.ad{background:linear-gradient(135deg,var(--lar),var(--lar2));color:var(--branco)}
+.ain{background:linear-gradient(135deg,var(--roxo),#4a2d9c);color:var(--branco)}
+.as{background:linear-gradient(135deg,var(--verde),#1d7a4c);color:var(--branco)}
+.aw{background:linear-gradient(135deg,var(--amar),var(--lar2));color:var(--preto)}
+.lcols{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:12px 0}
+.lc{border-radius:11px;padding:14px}.lc.vd{background:#e8f7e8;border:2px solid var(--verde)}.lc.vm{background:#feeaea;border:2px solid #e53935}
+.lc-t{font-size:12px;font-weight:700;margin-bottom:8px}.lc.vd .lc-t{color:var(--verde)}.lc.vm .lc-t{color:#c62828}
+.lc ul{list-style:none}.lc li{font-size:11.5px;color:#444;margin-bottom:4px;display:flex;gap:5px;align-items:flex-start}
+.lc.vd li::before{content:'●';color:var(--verde);flex-shrink:0}.lc.vm li::before{content:'●';color:#e53935;flex-shrink:0}
+.mr{display:flex;gap:5px;margin:14px 0;flex-wrap:wrap}
+.mi{flex:1;min-width:56px;background:var(--branco);border-radius:9px;padding:9px 3px;text-align:center;box-shadow:0 2px 7px rgba(0,0,0,.06)}
+.ml{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--branco);margin:0 auto 5px}
+.mw{font-size:8.5px;font-weight:600;color:#777;line-height:1.4}
+.tl{position:relative;padding-left:26px;margin:14px 0}.tl::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--borda)}
+.ti{position:relative;margin-bottom:14px}.td{position:absolute;left:-22px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--lar);border:2px solid var(--branco);box-shadow:0 0 0 2px var(--lar)}
+.tt{font-size:9px;font-weight:700;color:var(--lar);margin-bottom:1px;text-transform:uppercase;letter-spacing:.06em}
+.th{font-size:12.5px;font-weight:700;color:var(--preto);margin-bottom:2px}.tds{font-size:11.5px;color:#555;line-height:1.55}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:11px;margin:14px 0}
+.pc{background:var(--branco);border-radius:11px;padding:14px;border-top:4px solid var(--lar);box-shadow:0 2px 7px rgba(0,0,0,.055)}
+.pc:nth-child(2n){border-color:var(--verde)}.pc:nth-child(3n){border-color:var(--roxo)}.pc:nth-child(4n){border-color:var(--lima)}.pc:nth-child(5n){border-color:var(--lar2)}
+.pn{font-size:13px;font-weight:700;margin-bottom:4px}.pa{font-size:10px;color:var(--lar);font-weight:600;margin-bottom:6px}
+.pd{font-size:11px;color:#555;line-height:1.6}.ptags{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
+.pt{font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:8px;background:var(--cinza);color:#666}
+.et{width:100%;border-collapse:separate;border-spacing:0 3px;margin:12px 0}
+.et th{text-align:left;font-size:10px;font-weight:700;color:rgba(26,26,26,.45);letter-spacing:.06em;text-transform:uppercase;padding:5px 11px}
+.et td{padding:9px 11px;font-size:12px;background:var(--branco);color:#444}
+.et td:first-child{border-radius:7px 0 0 7px;font-weight:600;color:var(--preto)}.et td:last-child{border-radius:0 7px 7px 0}
+.et tr:nth-child(even) td{background:#f9f9f7}
+.eb{display:inline-flex;gap:3px;flex-wrap:wrap}
+.ebg{font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:7px;background:#FEF0EB;color:var(--lar)}
+.ebg.g{background:#e8f7e8;color:var(--verde)}.ebg.p{background:#EEEDFE;color:var(--roxo)}
+.sd{display:flex;align-items:center;gap:10px;margin:24px 0 14px}
+.sd span{font-size:12px;font-weight:700;color:rgba(26,26,26,.38);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.sd::before,.sd::after{content:'';flex:1;height:1px;background:var(--borda)}
+.qw{max-width:580px}
+.qprog{display:flex;gap:3px;margin-bottom:18px}
+.qd{flex:1;height:4px;border-radius:2px;background:var(--borda);transition:background .3s}
+.qd.ok{background:var(--verde)}.qd.ko{background:#e53935}.qd.cur{background:var(--lar)}
+.qc{display:inline-flex;align-items:center;gap:7px;background:var(--preto);color:var(--amar);padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:14px}
+.qt{font-size:11px;color:rgba(26,26,26,.45);margin-bottom:3px;font-weight:600}
+.qq{font-size:clamp(14px,3vw,19px);font-weight:800;line-height:1.35;margin-bottom:18px;color:var(--preto)}
+.qo{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.opt{width:100%;padding:12px 15px;border-radius:11px;background:var(--branco);border:2px solid transparent;font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;text-align:left;cursor:pointer;transition:all .16s;color:var(--preto);box-shadow:0 2px 7px rgba(0,0,0,.055);display:flex;align-items:center;gap:11px}
+.ol{width:26px;height:26px;border-radius:50%;flex-shrink:0;background:var(--cinza);font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;transition:all .16s}
+.opt:hover:not(:disabled){border-color:var(--lar);transform:translateX(3px)}.opt:hover:not(:disabled) .ol{background:var(--lar);color:var(--branco)}
+.opt.correct{background:#e8f7e8;border-color:var(--verde);color:var(--verde)}.opt.correct .ol{background:var(--verde);color:var(--branco)}
+.opt.wrong{background:#feeaea;border-color:#e53935;color:#c62828}.opt.wrong .ol{background:#e53935;color:var(--branco)}
+.opt:disabled{cursor:default}
+.fb{display:none;padding:13px 16px;border-radius:11px;margin-bottom:14px;animation:fu .28s ease}
+.fb.show{display:block}.fb.ok{background:#e8f7e8;border-left:4px solid var(--verde)}.fb.ko{background:#feeaea;border-left:4px solid #e53935}
+.fbt{font-size:12.5px;font-weight:700;margin-bottom:3px}.fbd{font-size:12px;line-height:1.6;color:#555}
+.fb.ok .fbt{color:var(--verde)}.fb.ko .fbt{color:#c62828}
+.rb{background:var(--branco);border-radius:14px;padding:28px;text-align:center;max-width:500px;box-shadow:0 4px 18px rgba(0,0,0,.1)}
+.re{font-size:66px;display:block;margin-bottom:10px;animation:bou 1s infinite alternate}
+@keyframes bou{to{transform:translateY(-7px)}}
+.rs{font-size:50px;font-weight:900;color:var(--preto);line-height:1}.rs span{color:var(--lar)}
+.rl{font-size:17px;font-weight:700;margin:7px 0 3px}.rm{font-size:12.5px;color:#777;max-width:360px;margin:0 auto 20px;line-height:1.65}
+.bk{text-align:left;margin-bottom:18px}.bkt{font-size:9.5px;font-weight:700;color:rgba(26,26,26,.38);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px}
+.bki{display:flex;align-items:center;gap:9px;margin-bottom:7px;font-size:11.5px}
+.bkt2{flex:1;height:6px;background:var(--cinza);border-radius:3px;overflow:hidden}
+.bkf{height:100%;border-radius:3px;transition:width 1s ease}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border-radius:38px;border:none;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:transform .14s,box-shadow .14s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.17)}
+.bp{background:var(--preto);color:var(--amar)}.bv{background:var(--verde);color:var(--branco)}
+.bl{background:var(--lar);color:var(--branco)}.bo{background:transparent;color:var(--preto);border:2px solid var(--preto)}
+.bs{padding:7px 16px;font-size:11.5px}
+.qsc{background:var(--preto);border-radius:14px;padding:24px;text-align:center;margin-top:6px;position:relative;overflow:hidden}
+.qsc::before{content:'';position:absolute;top:-28px;right:-28px;width:110px;height:110px;border-radius:50%;background:var(--lar);opacity:.18}
+.qsc h3{font-size:17px;font-weight:800;color:var(--branco);margin-bottom:5px}
+.qsc p{font-size:12.5px;color:rgba(255,255,255,.55);margin-bottom:18px;line-height:1.6}
+#toast{position:fixed;bottom:18px;right:18px;z-index:300;background:var(--preto);color:var(--amar);padding:9px 20px;border-radius:28px;font-size:12.5px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.28)}
+#toast.show{opacity:1}
+@media(max-width:768px){#sidebar{transform:translateX(-100%)}#sidebar.open{transform:translateX(0)}#main{margin-left:0}#hbg{display:flex}.ct{padding:18px 18px 56px}.hero{padding:56px 18px 26px}.lcols{grid-template-columns:1fr}.pg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav id="sidebar">
+<div class="sb-logo"><div class="lt">nu<span>be</span></div><p>Treinamento SBV — Março 2026</p></div>
+<div class="ns">Início</div>
+<a class="ni active" onclick="sp('home')" href="#"><span class="ni-ic">🏠</span>Visão Geral<span class="ni-dot"></span></a>
+<div class="ns">Conteúdo do Checklist</div>
+<a class="ni" onclick="sp('m1')" href="#"><span class="ni-ic">👋</span>Módulo 1 — Apresentação<span class="ni-dot"></span></a>
+<a class="ni" onclick="sp('m2')" href="#"><span class="ni-ic">✅</span>Módulo 2 — Confirmação de Dados<span class="ni-dot"></span></a>
+<a class="ni" onclick="sp('m3')" href="#"><span class="ni-ic">🏢</span>Módulo 3 — Informações da Vaga<span class="ni-dot"></span></a>
+<a class="ni" onclick="sp('m4')" href="#"><span class="ni-ic">📅</span>Módulo 4 — Entrevista e Política<span class="ni-dot"></span></a>
+<a class="ni" onclick="sp('m5')" href="#"><span class="ni-ic">⭐</span>Módulo 5 — Orientações Finais<span class="ni-dot"></span></a>
+<a class="ni" onclick="sp('m6')" href="#"><span class="ni-ic">💡</span>Módulo 6 — Qualidade e Dicas de PS<span class="ni-dot"></span></a>
+<a class="ni" onclick="sp('m7')" href="#"><span class="ni-ic">💻</span>Módulo 7 — Sistema e Ferramentas<span class="ni-dot"></span></a>
+<div class="ns">Macroetapa SBV</div>
+<a class="ni" onclick="sp('dias')" href="#"><span class="ni-ic">📆</span>Os 5 Dias do SBV<span class="ni-dot"></span></a>
+<a class="ni" onclick="sp('erros')" href="#"><span class="ni-ic">⚠️</span>Erros de Auditoria<span class="ni-dot"></span></a>
+<a class="ni" onclick="sp('turma')" href="#"><span class="ni-ic">👥</span>Perfis da Turma<span class="ni-dot"></span></a>
+<div class="ns">Quiz</div>
+<a class="ni" onclick="sp('quiz')" href="#"><span class="ni-ic">🎯</span>Quiz Geral<span class="ni-dot"></span></a>
+<div class="sb-score"><div class="sn" id="snum">0</div><div class="sl">pontos acumulados</div><div class="sb-track"><div class="sb-fill" id="sbar" style="width:0%"></div></div></div>
+</nav>
+<button id="hbg" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+<div id="toast"></div>
+<div id="main">
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+<div class="hero"><div class="hbadge">🚀 SBV Março 2026</div>
+<h1>Treinamento Completo<br><span>da Consultoria Nube</span></h1>
+<p>Todo o conteúdo dos 5 dias do SBV — checklist completo, apostila, macroetapa, perfis da turma, erros de auditoria e quiz interativo por módulo.</p>
+<div class="hpills"><span class="hp" style="background:var(--lar)">7 Módulos</span><span class="hp" style="background:var(--verde)">5 Dias SBV</span><span class="hp" style="background:var(--roxo)">Quiz por Módulo</span><span class="hp" style="background:var(--lar2)">Erros de Auditoria</span><span class="hp" style="background:var(--lima);color:#333">11 Perfis</span></div></div>
+<div class="ct">
+<div class="sd"><span>Mnemônico principal — Orientações Finais</span></div>
+<div class="alert ad"><div class="ai">🧠</div><div><strong>C · A · M · D · R · I · S — o erro #1 nas auditorias</strong><p>8 de 11 estagiários cometem erros nas Orientações Finais. Use este mnemônico como checklist mental após cada agendamento.</p></div></div>
+<div class="mr"><div class="mi"><div class="ml" style="background:var(--lar)">C</div><div class="mw">Confirmação</div></div><div class="mi"><div class="ml" style="background:var(--verde)">A</div><div class="mw">Alteração</div></div><div class="mi"><div class="ml" style="background:var(--lima)">M</div><div class="mw">Minhas Entrev.</div></div><div class="mi"><div class="ml" style="background:var(--lar2)">D</div><div class="mw">Documentos</div></div><div class="mi"><div class="ml" style="background:var(--roxo)">R</div><div class="mw">Redes Sociais</div></div><div class="mi"><div class="ml" style="background:var(--verde)">I</div><div class="mw">Indica APP</div></div><div class="mi"><div class="ml" style="background:var(--lar)">S</div><div class="mw">Salva Contato</div></div></div>
+<div class="sd"><span>Módulos de conteúdo</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px">
+<div class="card" style="cursor:pointer" onclick="sp('m1')"><div style="font-size:26px;margin-bottom:7px">👋</div><div class="ct2">Módulo 1 — Apresentação</div><div class="cs">Especialista + Resumo da Vaga</div></div>
+<div class="card" style="cursor:pointer;border-color:var(--verde)" onclick="sp('m2')"><div style="font-size:26px;margin-bottom:7px">✅</div><div class="ct2">Módulo 2 — Dados</div><div class="cs">Link Verde vs. Link Vermelho</div></div>
+<div class="card" style="cursor:pointer;border-color:var(--roxo)" onclick="sp('m3')"><div style="font-size:26px;margin-bottom:7px">🏢</div><div class="ct2">Módulo 3 — Vaga</div><div class="cs">Empresa, atividades e duração</div></div>
+<div class="card" style="cursor:pointer;border-color:var(--lar2)" onclick="sp('m4')"><div style="font-size:26px;margin-bottom:7px">📅</div><div class="ct2">Módulo 4 — Entrevista</div><div class="cs">PS e política de faltas</div></div>
+<div class="card" style="cursor:pointer;border-color:var(--lima)" onclick="sp('m5')"><div style="font-size:26px;margin-bottom:7px">⭐</div><div class="ct2">Módulo 5 — Orientações Finais</div><div class="cs">C·A·M·D·R·I·S completo</div></div>
+<div class="card" style="cursor:pointer;border-color:var(--verde)" onclick="sp('m6')"><div style="font-size:26px;margin-bottom:7px">💡</div><div class="ct2">Módulo 6 — Qualidade</div><div class="cs">Dicas de PS e português correto</div></div>
+<div class="card" style="cursor:pointer;border-color:var(--lar)" onclick="sp('m7')"><div style="font-size:26px;margin-bottom:7px">💻</div><div class="ct2">Módulo 7 — Sistema</div><div class="cs">Nubenet, TotalIP, e-mails</div></div>
+<div class="card" style="cursor:pointer;border-color:var(--roxo);background:var(--preto)" onclick="sp('quiz')"><div style="font-size:26px;margin-bottom:7px">🎯</div><div class="ct2" style="color:var(--amar)">Quiz Geral</div><div class="cs" style="color:rgba(255,255,255,.4)">20 perguntas — todos os módulos</div></div>
+</div>
+</div></div>
+
+<!-- M1 -->
+<div id="page-m1" class="page">
+<div class="hero"><div class="hbadge">👋 Módulo 1</div><h1>Apresentação &<br><span>Resumo da Vaga</span></h1><p>O início de toda consultoria. Sua apresentação define o tom de toda a ligação.</p></div>
+<div class="ct">
+<div class="card"><div class="ch"><div class="ci" style="background:#FEF0EB">🎤</div><div><div class="ct2">Apresentação — "Especialista"</div><div class="cs">Primeiro item do checklist</div></div></div>
+<p>Informe seu <strong>nome</strong>, seu <strong>cargo (Especialista do Nube)</strong> e <strong>de onde você fala</strong>.</p>
+<div class="fala">💬 "Olá, [nome do candidato]! Aqui é o(a) [seu nome], Especialista do Nube. Tudo bem com você?"</div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">📍</div><div><div class="ct2">Resumo da Vaga</div><div class="cs">Bairro + cidade + dica / Área / Jornada / Benefícios</div></div></div>
+<ul class="cl"><li>Bairro e cidade onde fica a vaga + dica de transporte</li><li>Área de atuação da vaga</li><li>Jornada de trabalho (horários)</li><li>Principais benefícios</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EEEDFE">🤝</div><div><div class="ct2">Chamar para participar</div><div class="cs">Convide com entusiasmo!</div></div></div>
+<div class="fala">💬 "Essa vaga está super alinhada com o seu perfil! Você topa participar?"</div></div>
+<div class="alert ain"><div class="ai">💡</div><div><strong>Coloque sorriso na voz!</strong><p>O candidato sente sua energia mesmo por telefone. Uma abertura animada e confiante já predispõe o candidato a confirmar. Esse é o superpoder do consultor!</p></div></div>
+<div class="qsc"><h3>🎯 Quiz — Módulo 1</h3><p>3 perguntas sobre apresentação e resumo da vaga</p><button class="btn bl" onclick="smq('m1')">Fazer quiz →</button></div>
+</div></div>
+
+<!-- M2 -->
+<div id="page-m2" class="page">
+<div class="hero"><div class="hbadge">✅ Módulo 2</div><h1>Confirmação<br>de <span>Dados</span></h1><p>O passo mais técnico e mais esquecido. Confirmar os dados incorretamente gera retrabalho e erros no encaminhamento.</p></div>
+<div class="ct">
+<div class="alert ad"><div class="ai">⚠️</div><div><strong>3° erro mais frequente nas auditorias — 8 de 11 estagiários!</strong><p>Geralmente esquecem de confirmar a escolaridade completa no link vermelho, ou confundem os dois links.</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#FFF3E5">📋</div><div><div class="ct2">Confirmar requisitos e informações internas</div><div class="cs">Antes de confirmar os dados pessoais</div></div></div>
+<ul class="cl"><li>Perfil compatível com os requisitos da vaga</li><li>Sem restrições no cadastro</li><li>Passar informações internas necessárias</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">🔗</div><div><div class="ct2">Link Verde vs. Link Vermelho</div><div class="cs">Não confunda os dois!</div></div></div>
+<div class="lcols">
+<div class="lc vd"><div class="lc-t">🟢 Link Verde — 3 campos</div><ul><li>Nome</li><li>E-mail</li><li>Telefone</li></ul></div>
+<div class="lc vm"><div class="lc-t">🔴 Link Vermelho — 10 campos</div><ul><li>Nome completo</li><li>Idade</li><li>CEP e cidade</li><li>E-mail</li><li>Telefone</li><li>Nome do curso</li><li>Semestre</li><li>Instituição + campus</li><li>Data de conclusão</li><li>Período (manhã/tarde/noite)</li></ul></div>
+</div></div>
+<div class="alert ain"><div class="ai">🧠</div><div><strong>O campo mais esquecido: Escolaridade</strong><p>São 6 sub-campos só de escolaridade: nome do curso, semestre, instituição, campus, conclusão e período. Tenha um cartão de consulta na mesa!</p></div></div>
+<div class="qsc"><h3>🎯 Quiz — Módulo 2</h3><p>4 perguntas sobre link verde, link vermelho e confirmação de dados</p><button class="btn bl" onclick="smq('m2')">Fazer quiz →</button></div>
+</div></div>
+
+<!-- M3 -->
+<div id="page-m3" class="page">
+<div class="hero"><div class="hbadge">🏢 Módulo 3</div><h1>Informações<br>da <span>Vaga</span></h1><p>Transparência e logística — o candidato precisa saber tudo antes de confirmar.</p></div>
+<div class="ct">
+<div class="alert ad"><div class="ai">⚠️</div><div><strong>Nome da empresa — 4° erro mais frequente (6/11)!</strong><p>O consultor foca no agendamento e deixa as infos da empresa para depois — aí esquece. Passe ANTES de confirmar!</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#FEF0EB">🏢</div><div><div class="ct2">Nome da Empresa + Ramo e Porte</div><div class="cs">Sempre antes de confirmar!</div></div></div>
+<ul class="cl"><li>Nome completo da empresa</li><li>Ramo de atuação (ex: tecnologia, saúde, varejo)</li><li>Porte da empresa (pequena, média, grande)</li></ul>
+<div class="fala">💬 "A empresa se chama [nome], atua no ramo de [ramo] e é de porte [porte]."</div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">📋</div><div><div class="ct2">Atividades do Estágio</div><div class="cs">O que o estagiário fará no dia a dia</div></div></div>
+<p>Descreva as atividades de forma clara e animada. Isso ajuda o candidato a imaginar seu dia a dia e aumenta o engajamento com a vaga.</p></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#F3FAE8">⏱</div><div><div class="ct2">Duração do Estágio</div><div class="cs">Informação obrigatória do checklist</div></div></div>
+<p>Informe o período do contrato (6 meses, 1 ano, etc.) e se há possibilidade de renovação ou efetivação.</p></div>
+<div class="qsc"><h3>🎯 Quiz — Módulo 3</h3><p>3 perguntas sobre nome de empresa, ramo, porte e atividades</p><button class="btn bl" onclick="smq('m3')">Fazer quiz →</button></div>
+</div></div>
+
+<!-- M4 -->
+<div id="page-m4" class="page">
+<div class="hero"><div class="hbadge">📅 Módulo 4</div><h1>Entrevista &<br><span>Política de Faltas</span></h1><p>Explique o formato do PS e passe a política de faltas com naturalidade — sem parecer uma ameaça!</p></div>
+<div class="ct">
+<div class="card"><div class="ch"><div class="ci" style="background:#EEEDFE">💻</div><div><div class="ct2">Formato da Entrevista</div><div class="cs">Verificar e informar o tipo</div></div></div>
+<ul class="cl"><li>Presencial — informar endereço e como chegar</li><li>Remota — informar plataforma e link de acesso</li><li>Vídeo entrevista — como gravar e enviar</li><li>Provas e/ou questionários — como acessar</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#FFF3E5">📅</div><div><div class="ct2">Horário e Agendamento</div><div class="cs">Verificar disponibilidade e confirmar</div></div></div>
+<p>Verifique o horário disponível, informe como fazer a entrevista e confirme que o candidato tem todas as informações de acesso.</p>
+<div class="fala">💬 "Perfeito! Você está confirmado(a) para o dia [data] às [hora]. Posso confirmar sua participação?"</div></div>
+<div class="alert ad"><div class="ai">🚨</div><div><strong>2° erro mais frequente — Política de Faltas (8/11)!</strong><p>Parece um tema constrangedor e é evitado inconscientemente. Use uma frase de transição para introduzir de forma natural.</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#feeaea">📜</div><div><div class="ct2">Política de Faltas, Desmarques e Remarques</div><div class="cs">Obrigatório em TODA ligação</div></div></div>
+<p>Passe a política de <strong>desclassificação, faltas, desmarques e remarques</strong>. Introduza com naturalidade:</p>
+<div class="fala">💬 "Antes de confirmar, preciso te passar uma informação importante sobre o processo seletivo..."</div>
+<div class="fala" style="border-color:var(--verde);margin-top:7px">💬 "Caso precise remarcar, você pode fazer isso pela aba Minhas Entrevistas com antecedência."</div></div>
+<div class="qsc"><h3>🎯 Quiz — Módulo 4</h3><p>4 perguntas sobre entrevista, agendamento e política de faltas</p><button class="btn bl" onclick="smq('m4')">Fazer quiz →</button></div>
+</div></div>
+
+<!-- M5 -->
+<div id="page-m5" class="page">
+<div class="hero"><div class="hbadge">⭐ Módulo 5</div><h1>Orientações Finais<br><span>C · A · M · D · R · I · S</span></h1><p>O erro #1 nas auditorias. Use o mnemônico e nunca pule nenhum dos 7 sub-itens!</p></div>
+<div class="ct">
+<div class="alert ad"><div class="ai">🚨</div><div><strong>Erro #1 — 8 de 11 estagiários!</strong><p>São 7 sub-itens depois do agendamento. O consultor "desliga" após confirmar — e pula tudo. Use C·A·M·D·R·I·S como checklist mental.</p></div></div>
+<div class="mr"><div class="mi"><div class="ml" style="background:var(--lar)">C</div><div class="mw">Confirmação</div></div><div class="mi"><div class="ml" style="background:var(--verde)">A</div><div class="mw">Alteração</div></div><div class="mi"><div class="ml" style="background:var(--lima)">M</div><div class="mw">Minhas Entrev.</div></div><div class="mi"><div class="ml" style="background:var(--lar2)">D</div><div class="mw">Documentos</div></div><div class="mi"><div class="ml" style="background:var(--roxo)">R</div><div class="mw">Redes Sociais</div></div><div class="mi"><div class="ml" style="background:var(--verde)">I</div><div class="mw">Indica APP</div></div><div class="mi"><div class="ml" style="background:var(--lar)">S</div><div class="mw">Salva Contato</div></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#FEF0EB">📧</div><div><div class="ct2">C — Confirmação</div><div class="cs">E-mail e SMS de confirmação do agendamento</div></div></div>
+<div class="fala">💬 "Você vai receber um e-mail e um SMS confirmando o agendamento. Fique de olho!"</div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">🔔</div><div><div class="ct2">A — Alteração</div><div class="cs">E-mail e SMS de alteração — item destacado em amarelo na apostila!</div></div></div>
+<div class="fala">💬 "Se houver qualquer mudança no processo, você será avisado por e-mail e SMS de alteração. Não se assuste!"</div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#F3FAE8">📱</div><div><div class="ct2">M — Minhas Entrevistas</div><div class="cs">Aba no site e no APP do Nube</div></div></div>
+<div class="fala">💬 "Todas as informações da sua entrevista ficam disponíveis na aba Minhas Entrevistas e Processos Seletivos, no site e no APP."</div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#FFF3E5">📄</div><div><div class="ct2">D — Documentos para o PS</div><div class="cs">O que levar no dia da entrevista</div></div></div>
+<ul class="cl"><li>Carta de encaminhamento</li><li>CV impresso e atualizado</li><li>Documento com foto (RG ou CNH)</li><li>Traje adequado ao ambiente da empresa</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EEEDFE">📲</div><div><div class="ct2">R — Redes Sociais do Nube</div><div class="cs">@NUBEVAGAS em todas as plataformas</div></div></div>
+<ul class="cl"><li>TikTok @NUBEVAGAS</li><li>Instagram @NUBEVAGAS</li><li>LinkedIn @NUBEVAGAS</li></ul>
+<div class="fala">💬 "Segue o Nube nas redes! Tem muita dica de PS e vagas novas toda semana."</div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">📲</div><div><div class="ct2">I — Indica o APP Nube Vagas</div><div class="cs">Android e iOS — gratuito</div></div></div>
+<div class="fala">💬 "Baixa o APP Nube Vagas — todas as suas vagas e o chat ficam disponíveis por lá. É gratuito!"</div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#FEF0EB">💾</div><div><div class="ct2">S — Salva o Contato do Nube</div><div class="cs">Antes de desligar — peça agora!</div></div></div>
+<div class="fala">💬 "Salva o nosso contato agora mesmo para não perder nenhuma comunicação importante do Nube!"</div></div>
+<div class="card" style="background:linear-gradient(135deg,#fffde7,#fff9c4);border-color:var(--amar)">
+<div class="ch"><div class="ci" style="background:var(--amar)">🌟</div><div><div class="ct2">Encerramento — Sempre assim!</div><div class="cs">Sem exceção em nenhuma ligação</div></div></div>
+<ul class="cl"><li class="s">Mensagem positiva e encorajadora</li><li class="s">Boa Sorte!</li><li class="s">Encerre em nome do Nube</li><li class="w">Ligações RECEPTIVAS: pesquisa de satisfação antes de encerrar</li></ul></div>
+<div class="qsc"><h3>🎯 Quiz — Módulo 5</h3><p>5 perguntas sobre o mnemônico C·A·M·D·R·I·S completo</p><button class="btn bl" onclick="smq('m5')">Fazer quiz →</button></div>
+</div></div>
+
+<!-- M6 -->
+<div id="page-m6" class="page">
+<div class="hero"><div class="hbadge">💡 Módulo 6</div><h1>Qualidade &<br><span>Dicas de PS</span></h1><p>O que diferencia um consultor comum de um consultor referência — baseado no treinamento do Ton (Dia 4).</p></div>
+<div class="ct">
+<div class="card"><div class="ch"><div class="ci" style="background:#FEF0EB">🏆</div><div><div class="ct2">Consultor Referência vs. Consultor Comum</div><div class="cs">Treinamento Ton — Dia 4 do SBV</div></div></div>
+<ul class="cl"><li class="s">Sorriso na voz — o candidato sente a energia por telefone</li><li class="s">Segue o checklist na ordem, sem pular etapas</li><li class="s">Personaliza as dicas de PS para a vaga específica</li><li class="s">Usa o nome do candidato durante a ligação</li><li class="s">Transmite confiança e conhecimento sobre a vaga</li><li class="w">Não usa gerundismo</li><li class="w">Fala "do Nube" — nunca "da Nube"</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">💬</div><div><div class="ct2">Dicas de PS Personalizadas</div><div class="cs">Adaptar ao tipo de entrevista</div></div></div>
+<ul class="cl"><li>Chegar 10 minutos antes do horário</li><li>Pesquisar sobre a empresa antes da entrevista</li><li>Levar os documentos completos e organizados</li><li>Vestimenta adequada ao ramo da empresa</li><li>Para entrevista remota: testar câmera, microfone e internet antes</li><li>Para vídeo entrevista: fundo neutro e boa iluminação</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EEEDFE">📝</div><div><div class="ct2">Português Correto — Gerundismo</div><div class="cs">Treinado no Dia 5 do SBV</div></div></div>
+<ul class="cl"><li class="w">❌ "Vou estar verificando" → ✅ "Vou verificar"</li><li class="w">❌ "Vou estar enviando" → ✅ "Vou enviar"</li><li class="w">❌ "Pode estar sendo feito" → ✅ "Pode ser feito"</li><li class="w">❌ "da Nube" → ✅ "do Nube"</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#FFF3E5">📊</div><div><div class="ct2">Como evitar Ociosidade</div><div class="cs">Treinado no Dia 2 do SBV</div></div></div>
+<ul class="cl"><li>Usar encaminhamento automático entre ligações</li><li>Trabalhar vagas nos momentos de menor volume</li><li>Anotar resultados das ligações</li><li>Logar com 2 minutos de antecedência</li><li>Usar cronômetro para controlar tempo por atendimento</li></ul></div>
+<div class="qsc"><h3>🎯 Quiz — Módulo 6</h3><p>3 perguntas sobre qualidade, português e dicas de PS</p><button class="btn bl" onclick="smq('m6')">Fazer quiz →</button></div>
+</div></div>
+
+<!-- M7 -->
+<div id="page-m7" class="page">
+<div class="hero"><div class="hbadge">💻 Módulo 7</div><h1>Sistema &<br><span>Ferramentas</span></h1><p>Nubenet, TotalIP e tudo que você precisa dominar para operar com eficiência.</p></div>
+<div class="ct">
+<div class="card"><div class="ch"><div class="ci" style="background:#FEF0EB">💻</div><div><div class="ct2">Nubenet — O Sistema Principal</div><div class="cs">Treinado nos Dias 1, 2 e 3</div></div></div>
+<ul class="cl"><li>Login com autenticador (Google Authenticator)</li><li>Aba de Estudantes — links: OE, TMKT, Eq. HO, Sábado, BA, Ident</li><li>Filtros e busca de candidatos</li><li>Histórico do candidato ("a vida dele no Nube")</li><li>Como ver PS agendado, faltas e OEs</li><li>Criar e atualizar cadastro de candidatos</li><li>CV x OE — quando, porque e como fazer</li><li>Encaminhamento fora do perfil</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">📞</div><div><div class="ct2">TotalIP — Telefonia</div><div class="cs">Logar 2 minutos antes do início</div></div></div>
+<ul class="cl"><li>Logar na fila do backoffice nos dias de SBV</li><li>Filas: Estudantes, Estudantes TTS, Ligue-me, Backoffice</li><li>Como ligar para a gestão (Kell, Supers, Apoio)</li><li>Intervalos — como pausar corretamente</li><li>Transferência de ligação</li><li>eyeBeam — configuração AA e conferência</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EEEDFE">📋</div><div><div class="ct2">Estágio vs. Jovem Aprendiz</div><div class="cs">Treinado no Dia 4</div></div></div>
+<ul class="cl"><li>Estágio: recesso remunerado, seguro de vida, BA sem descontos tributários</li><li>Jovem Aprendiz (JA): regras específicas da CLT</li><li>Menores de idade: apenas vagas próximas ou em cidades limítrofes</li><li>Verificar sempre a lei de estágio e aprendiz</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#FFF3E5">📧</div><div><div class="ct2">E-mails e Planilhas Especiais</div><div class="cs">Treinado no Dia 4</div></div></div>
+<ul class="cl"><li>estt@nube — estágio especial</li><li>videoentrevista@nube — vídeo entrevistas</li><li>aprendizes@saberaprendizes.org.br — aprendizes</li><li>Planilha de empresas que não contatam</li><li>Contratos WhatsApp: (11) 31547380</li></ul></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">🔔</div><div><div class="ct2">SMS de Alteração</div><div class="cs">O que é e o que fazer</div></div></div>
+<ul class="cl"><li>O candidato recebe SMS/e-mail quando há mudança no PS</li><li>Quando o candidato ligar informando alteração: consultar o sistema e orientar</li><li>Verificar nova data/horário e repassar as informações atualizadas</li></ul></div>
+<div class="qsc"><h3>🎯 Quiz — Módulo 7</h3><p>3 perguntas sobre sistema, ferramentas e procedimentos</p><button class="btn bl" onclick="smq('m7')">Fazer quiz →</button></div>
+</div></div>
+
+<!-- DIAS -->
+<div id="page-dias" class="page">
+<div class="hero"><div class="hbadge">📆 Macroetapa SBV</div><h1>Os <span>5 Dias</span><br>do Treinamento</h1><p>Plano de aula completo — o que aconteceu em cada dia do SBV de Março 2026.</p></div>
+<div class="ct">
+<div class="card" style="border-color:var(--lar)"><div class="ch"><div class="ci" style="background:#FEF0EB">1️⃣</div><div><div class="ct2">Dia 1 — 25/03 · Rita e Thami</div><div class="cs">Objetivo: Conhecer a empresa, ferramentas e realizar a primeira escuta</div></div></div>
+<div class="tl">
+<div class="ti"><div class="td"></div><div class="tt">10h – 11h</div><div class="th">Apresentação + Tripé</div><div class="tds">Missão, Visão e Valores. Regras: atrasos, vestimenta, LGPD, copa. Combinados do treinamento e fala sobre autoencaminhamento.</div></div>
+<div class="ti"><div class="td" style="background:var(--verde);box-shadow:0 0 0 2px var(--verde)"></div><div class="tt">11h – 11h50</div><div class="th">Curso: O Poder de Fazer a Diferença</div><div class="tds">Curso de engajamento e propósito profissional.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">11h57 – 12h30</div><div class="th">Nubenet: Login + TotalIP + Scripts + Normas</div><div class="tds">Como logar, autenticador, eyeBeam, passo a passo de ligação, intervalos, transferência.</div></div>
+<div class="ti"><div class="td" style="background:var(--roxo);box-shadow:0 0 0 2px var(--roxo)"></div><div class="tt">12h30 – 12h40</div><div class="th">Tour pelo setor</div><div class="tds">Apresentar equipe de supervisão e apoios, copa, banheiros.</div></div>
+<div class="ti"><div class="td" style="background:var(--lima);box-shadow:0 0 0 2px var(--lima)"></div><div class="tt">13h40 – 14h10</div><div class="th">🎧 Primeira Escuta (30 min)</div><div class="tds">Primeiro contato com ligações reais. Anotar o que absorveram para análise conjunta depois.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">14h40 – 15h40</div><div class="th">Nubenet: Vagas, OEs, Aba de Estudantes</div><div class="tds">Escolas, filtros, links da aba, como encaminhar, aguardar horário, requisitos, histórico.</div></div>
+<div class="ti"><div class="td" style="background:var(--amar);box-shadow:0 0 0 2px var(--amar)"></div><div class="tt">16h47 – 17h</div><div class="th">Check-out: Cápsula do Tempo</div><div class="tds">"O que te traz mais medo agora?" — guardado sem ler, entregue no último dia.</div></div>
+</div></div>
+<div class="card" style="border-color:var(--verde)"><div class="ch"><div class="ci" style="background:#EAF7F0">2️⃣</div><div><div class="ct2">Dia 2 — 26/03 · Thami</div><div class="cs">Objetivo: Tipos de processos, checklist e primeira fila em dupla</div></div></div>
+<div class="tl">
+<div class="ti"><div class="td" style="background:var(--verde);box-shadow:0 0 0 2px var(--verde)"></div><div class="tt">10h – 10h20</div><div class="th">Check-in: Mapa de Conexões</div><div class="tds">Dinâmica de integração — cada um fala com todos. Ranking de pontuações apresentado.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">10h30 – 11h30</div><div class="th">Tipos de PS + Políticas + Orientações Finais</div><div class="tds">Aba Minhas Entrevistas, política de desmarque/faltas/desclassificação, e-mail e SMS de confirmação e alteração.</div></div>
+<div class="ti"><div class="td" style="background:var(--verde);box-shadow:0 0 0 2px var(--verde)"></div><div class="tt">11h30 – 12h30</div><div class="th">Tipos de Ligação: Receptiva / Discador / Ligue-me</div><div class="tds">Diferenças e procedimentos para cada tipo de ligação.</div></div>
+<div class="ti"><div class="td" style="background:var(--roxo);box-shadow:0 0 0 2px var(--roxo)"></div><div class="tt">13h30 – 13h50</div><div class="th">Quiz 1 em sala + correção</div><div class="tds">Primeiro quiz para fixar o conteúdo.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">13h50 – 14h20</div><div class="th">Apresentação do Checklist</div><div class="tds">Explicar e ensinar cada tópico e por que fazemos assim. Confirmação de dados, políticas, diferenças entre ligações.</div></div>
+<div class="ti"><div class="td" style="background:var(--lima);box-shadow:0 0 0 2px var(--lima)"></div><div class="tt">14h47 – 16h47</div><div class="th">🎧 Fila em Dupla (2h)</div><div class="tds">Cada consultor fica 1h atendendo enquanto o colega auxilia nas dúvidas.</div></div>
+</div></div>
+<div class="card" style="border-color:var(--roxo)"><div class="ch"><div class="ci" style="background:#EEEDFE">3️⃣</div><div><div class="ct2">Dia 3 — 27/03 · Rita</div><div class="cs">Objetivo: Aprofundar detalhes técnicos do Nubenet</div></div></div>
+<div class="tl">
+<div class="ti"><div class="td" style="background:var(--roxo);box-shadow:0 0 0 2px var(--roxo)"></div><div class="tt">10h – 10h30</div><div class="th">Check-in: Trend + Ranking</div><div class="tds">Correção do Quiz 1 + ranking atualizado.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">10h30 – 11h</div><div class="th">Revisão Geral</div><div class="tds">Tipos de ligação, login/logout, requisitos, checklist completo. Estimular que digam o porquê das respostas.</div></div>
+<div class="ti"><div class="td" style="background:var(--verde);box-shadow:0 0 0 2px var(--verde)"></div><div class="tt">11h – 12h</div><div class="th">Simulação focada no Checklist (1h)</div><div class="tds">Ordem do contato, políticas, tipos de PS. OEs para simulação.</div></div>
+<div class="ti"><div class="td" style="background:var(--lima);box-shadow:0 0 0 2px var(--lima)"></div><div class="tt">12h05 – 13h30</div><div class="th">🎧 Fila Individual (1h25)</div><div class="tds">Primeira vez sozinhos! Ligar para o apoio em caso de dúvidas.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">14h30 – 15h30</div><div class="th">CV x OE + SMS de Alteração</div><div class="tds">Quando, porque e como fazer. O que é notificação de alteração e como proceder.</div></div>
+<div class="ti"><div class="td" style="background:var(--lima);box-shadow:0 0 0 2px var(--lima)"></div><div class="tt">15h40 – 16h30</div><div class="th">🎧 Fila Individual (50 min)</div><div class="tds">Segunda rodada individual.</div></div>
+<div class="ti"><div class="td" style="background:var(--roxo);box-shadow:0 0 0 2px var(--roxo)"></div><div class="tt">16h30 – 17h</div><div class="th">Nuvem de Dúvidas — Mentimeter</div><div class="tds">Dúvidas anônimas enviadas. Correção em grupo. Quiz 2 enviado para casa.</div></div>
+</div></div>
+<div class="card" style="border-color:var(--lar2)"><div class="ch"><div class="ci" style="background:#FFF3E5">4️⃣</div><div><div class="ct2">Dia 4 — 30/03 · Thami</div><div class="cs">Objetivo: Qualidade de atendimento, escuta avançada e procedimentos JA</div></div></div>
+<div class="tl">
+<div class="ti"><div class="td" style="background:var(--lima);box-shadow:0 0 0 2px var(--lima)"></div><div class="tt">10h – 11h</div><div class="th">🎧 Fila Individual</div><div class="tds">Início do dia direto na fila.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">11h – 11h20</div><div class="th">Ranking + Correção do Quiz 2</div></div>
+<div class="ti"><div class="td" style="background:var(--lar2);box-shadow:0 0 0 2px var(--lar2)"></div><div class="tt">11h27 – 13h</div><div class="th">Treinamento Ton — Consultor Referência</div><div class="tds">O que diferencia um consultor comum de um referência? Checklist de atendimento e dicas de PS personalizadas.</div></div>
+<div class="ti"><div class="td" style="background:var(--verde);box-shadow:0 0 0 2px var(--verde)"></div><div class="tt">14h – 14h30</div><div class="th">🎧 Escuta Avançada</div><div class="tds">Foco: como o consultor conduz a ligação. Aplicar aprendizado do treinamento Ton.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">14h50 – 15h10</div><div class="th">Estágio vs. JA + Menores de Idade</div><div class="tds">Procedimentos específicos, lei de estágio e aprendiz, cidades limítrofes.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">15h10 – 15h20</div><div class="th">Planilhas e E-mails Especiais</div></div>
+<div class="ti"><div class="td" style="background:var(--lima);box-shadow:0 0 0 2px var(--lima)"></div><div class="tt">15h20 – 16h40</div><div class="th">🎧 Fila Individual (1h20)</div><div class="tds">Colocar em prática o que viu nas escutas e no treinamento Ton.</div></div>
+</div></div>
+<div class="card" style="border-color:var(--lima)"><div class="ch"><div class="ci" style="background:#F3FAE8">5️⃣</div><div><div class="ct2">Dia 5 — 31/03 · Rita</div><div class="cs">Objetivo: Encerramento, dúvidas frequentes e formatura</div></div></div>
+<div class="tl">
+<div class="ti"><div class="td" style="background:var(--lima);box-shadow:0 0 0 2px var(--lima)"></div><div class="tt">10h – 11h30</div><div class="th">🎧 Fila Individual (1h30)</div></div>
+<div class="ti"><div class="td"></div><div class="tt">11h30 – 11h50</div><div class="th">Ranking + Correção do Quiz 3</div></div>
+<div class="ti"><div class="td" style="background:var(--roxo);box-shadow:0 0 0 2px var(--roxo)"></div><div class="tt">11h50 – 12h20</div><div class="th">Rodada de Perguntas Competitiva</div><div class="tds">Competem em duplas com cartões de perguntas. Todos participam de duas rodadas.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">12h20 – 12h50</div><div class="th">Português Correto — Gerundismo</div><div class="tds">Importância do português nas atividades e como evitar gerundismo.</div></div>
+<div class="ti"><div class="td"></div><div class="tt">12h50 – 13h15</div><div class="th">Atividade: Correção de Texto</div><div class="tds">Ler o texto, encontrar erros e fazer a correção em grupo.</div></div>
+<div class="ti"><div class="td" style="background:var(--verde);box-shadow:0 0 0 2px var(--verde)"></div><div class="tt">14h15 – 14h30</div><div class="th">Apresentação das Equipes e Supervisores</div></div>
+<div class="ti"><div class="td" style="background:var(--amar);box-shadow:0 0 0 2px var(--amar)"></div><div class="tt">14h30 – 15h</div><div class="th">🎉 Abertura das Cápsulas + "O Abacaxi" + Destaque SBV</div><div class="tds">Cada um lê o que escreveu no Dia 1. Check-out final. Destaque do SBV revelado!</div></div>
+<div class="ti"><div class="td" style="background:var(--lima);box-shadow:0 0 0 2px var(--lima)"></div><div class="tt">15h – 17h</div><div class="th">🎧 Fila Individual (2h)</div></div>
+</div></div>
+</div></div>
+
+<!-- ERROS -->
+<div id="page-erros" class="page">
+<div class="hero"><div class="hbadge">⚠️ Auditoria</div><h1>Erros<br><span>Identificados</span></h1><p>Levantamento dos principais erros encontrados nas auditorias da turma SBV — Março 2026.</p></div>
+<div class="ct">
+<div class="alert ad"><div class="ai">🚨</div><div><strong>Top 4 erros mais frequentes</strong><p>1. Orientações Finais incompletas · 2. Política de faltas não informada · 3. Confirmação de dados (link vermelho incompleto) · 4. Nome da empresa não informado</p></div></div>
+<div class="sd"><span>Por estagiário</span></div>
+<table class="et"><thead><tr><th>Estagiário</th><th>Erros identificados</th></tr></thead><tbody>
+<tr><td>Daniel Lucas</td><td><div class="eb"><span class="ebg">Política de faltas</span><span class="ebg">Orientações finais</span><span class="ebg p">Entrevista ≠ local do PS</span></div></td></tr>
+<tr><td>Cayo Vitor</td><td><div class="eb"><span class="ebg">Orientações finais</span><span class="ebg">Confirmação de requisitos</span><span class="ebg">Link vermelho — escolaridade</span></div></td></tr>
+<tr><td>Fernanda Soares</td><td><div class="eb"><span class="ebg">Nome da empresa</span><span class="ebg">Link vermelho — CEP</span><span class="ebg">Local da empresa</span></div></td></tr>
+<tr><td>Sophia Lima</td><td><div class="eb"><span class="ebg">Conf. dados pós enc.</span><span class="ebg">Política de faltas</span><span class="ebg">Nome da empresa</span></div></td></tr>
+<tr><td>Luiza O.</td><td><div class="eb"><span class="ebg">Nome da empresa</span><span class="ebg">Ramo e porte</span><span class="ebg">Política de faltas</span></div></td></tr>
+<tr><td>Danylo</td><td><div class="eb"><span class="ebg">Política de faltas</span><span class="ebg">Link vermelho — escolaridade</span><span class="ebg">Orientações finais</span></div></td></tr>
+<tr><td>Kamilly</td><td><div class="eb"><span class="ebg">Link vermelho — escolaridade</span><span class="ebg">Nome/ramo/porte</span><span class="ebg">Política de faltas</span><span class="ebg">Requisitos</span></div></td></tr>
+<tr><td>Maria Eduarda</td><td><div class="eb"><span class="ebg">Orientações finais</span><span class="ebg">Conf. dados pós enc.</span><span class="ebg">Nome da empresa</span><span class="ebg">Link vermelho</span></div></td></tr>
+<tr><td>Deborah</td><td><div class="eb"><span class="ebg">Orientações finais</span><span class="ebg">Confirmação de dados</span><span class="ebg p">Vagas no filtro</span></div></td></tr>
+<tr><td>Alessandra</td><td><div class="eb"><span class="ebg">Orientações finais</span><span class="ebg">Nome da empresa</span><span class="ebg">Política de faltas</span></div></td></tr>
+<tr><td>Vitor Maurício</td><td><div class="eb"><span class="ebg">Orientações finais</span><span class="ebg">Confirmação de dados</span><span class="ebg">Política de faltas</span></div></td></tr>
+</tbody></table>
+<div class="sd"><span>Ranking geral de erros</span></div>
+<div class="card"><ul class="cl">
+<li class="w">Orientações Finais incompletas (8/11)</li><li class="w">Política de faltas não informada (8/11)</li>
+<li class="w">Link vermelho incompleto — esquece escolaridade (8/11)</li><li class="w">Nome da empresa não informado (6/11)</li>
+<li>Confirmação de dados após encaminhar (4/11)</li><li>Ramo e porte da empresa (3/11)</li><li>Confirmação de requisitos (2/11)</li>
+<li class="s">Vagas no filtro — erro pontual (1/11)</li><li class="s">Entrevista diferente do local do PS — erro pontual (1/11)</li>
+</ul></div>
+</div></div>
+
+<!-- TURMA -->
+<div id="page-turma" class="page">
+<div class="hero"><div class="hbadge">👥 Turma SBV</div><h1>Perfis<br><span>da Turma</span></h1><p>11 estagiários formados. Percepções das instrutoras Rita e Thami ao longo dos 5 dias.</p></div>
+<div class="ct">
+<div class="alert as"><div class="ai">🏆</div><div><strong>Destaque do SBV: Luiza Otero</strong><p>Maior participação da turma, conectou com todos, primeira no Mapa de Conexões. Ansiosa pré-fila, mas com grande vontade de superar.</p></div></div>
+<div class="pg">
+<div class="pc" style="border-color:var(--amar)"><div class="pn">Luiza Otero ⭐</div><div class="pa">Lu — DESTAQUE SBV · Super: Bru · Apoio: Lo</div><div class="pd">Maior participação da turma. Sem medo de errar. Ansiosa pré e pós fila. Primeira a terminar o Mapa de Conexões. Grande vontade de superar a ansiedade.</div><div class="ptags"><span class="pt" style="background:var(--amar);color:#333">Destaque</span><span class="pt">Ansiosa</span><span class="pt">Liderança</span></div></div>
+<div class="pc"><div class="pn">Alessandra De Camargo</div><div class="pa">Ale · Super: Ton · Apoio: Thami</div><div class="pd">Observadora e comunicativa. Anotou tudo, participou sempre. Ficou impaciente com Vitor na dupla. Precisou reforço por ociosidade nos primeiros dias.</div><div class="ptags"><span class="pt">Comunicativa</span><span class="pt">Anota tudo</span></div></div>
+<div class="pc"><div class="pn">Cayo Vitor Freitas Lima</div><div class="pa">Ca / Cayão · Super: Bru · Apoio: Rhu</div><div class="pd">Mais reservado mas participativo. Perguntou sobre tom de voz. Criativo nas mensagens de venda. Ligou várias vezes para tirar dúvidas.</div><div class="ptags"><span class="pt">Reservado</span><span class="pt">Criativo</span><span class="pt">Proativo</span></div></div>
+<div class="pc"><div class="pn">Daniel Lucas Santos</div><div class="pa">Daniel · Super: Gabi · Apoio: Rita</div><div class="pd">Anotou tudo e usou na fila. Candidato a destaque mas perdeu pontos por não atualizar a rede. Chegou 1h atrasado no último dia com comprovante.</div><div class="ptags"><span class="pt">Metódico</span><span class="pt">Autônomo</span></div></div>
+<div class="pc"><div class="pn">Danylo Souza Santos</div><div class="pa">Danylo · Super: Bru · Apoio: Rita</div><div class="pd">Muito participativo mas perdia foco rápido. Fez perguntas sobre conteúdo recém explicado. Muitos erros no 1° acompanhamento.</div><div class="ptags"><span class="pt">Alta energia</span><span class="pt">Foco disperso</span></div></div>
+<div class="pc"><div class="pn">Deborah Hipolito Souza Costa</div><div class="pa">Deh · Super: Jacke · Apoio: Thami</div><div class="pd">Muito participativa e curiosa. Revisava materiais em casa. Persistiu em falar "da Nube" após várias correções.</div><div class="ptags"><span class="pt">Curiosa</span><span class="pt">Estuda em casa</span></div></div>
+<div class="pc"><div class="pn">Fernanda Soares Duarte</div><div class="pa">Feh · Super: Bru · Apoio: Rita</div><div class="pd">Anotou tudo mas participou pouco. Sentou sozinha todos os dias. Não se enturmou com a turma. Precisou de estímulo direto.</div><div class="ptags"><span class="pt">Introvertida</span><span class="pt">Baixa iniciativa</span></div></div>
+<div class="pc"><div class="pn">Kamille Trindade da Silva</div><div class="pa">Kamis · Super: Jacke · Apoio: Rhu</div><div class="pd">Chegou atrasada no Dia 1 (trânsito + farmácia). Participou mas interrompia respostas antes de concluírem. Precisou ser incentivada a anotar.</div><div class="ptags"><span class="pt">Impulsiva</span><span class="pt">Participativa</span></div></div>
+<div class="pc"><div class="pn">Maria Eduarda Carvalho Vidal</div><div class="pa">Duda · Super: Jacke · Apoio: Lo</div><div class="pd">Reservada mas consegue trabalhar em grupo. Poucas perguntas em sala, mas dificuldades apareceram no quiz. Centrada e calma.</div><div class="ptags"><span class="pt">Reservada</span><span class="pt">Calma</span><span class="pt">Criativa</span></div></div>
+<div class="pc"><div class="pn">Sophia Lima Barboza</div><div class="pa">Sophi · Super: Bru · Apoio: Thami</div><div class="pd">Participava apenas quando chamada diretamente. Anotações somente após cobrança. Precisou de estímulo para atualizar o Padlet.</div><div class="ptags"><span class="pt">Passiva</span><span class="pt">Depende estímulo</span></div></div>
+<div class="pc"><div class="pn">Vitor Mauricio Da Silva</div><div class="pa">Maurício / Vitor · Super: Ton · Apoio: Lo</div><div class="pd">Disse ser comunicativo mas se isolou. Atento ao conteúdo e participou nas explicações, mas errou bastante na fila. Dificuldade de integração.</div><div class="ptags"><span class="pt">Teoria ≠ Prática</span><span class="pt">Isolado</span></div></div>
+</div>
+<div class="sd"><span>Percepção geral</span></div>
+<div class="card"><div class="ch"><div class="ci" style="background:#EAF7F0">💬</div><div><div class="ct2">Rita e Thami — SBV Março 2026</div></div></div>
+<p>"A turma é bem animada, participativa e atenciosa, não ficaram com medo de participar e não houve julgamentos. Anotaram o que falamos e até usaram para atualizar a rede diariamente. Cada um tinha seu grupinho, mas durante o almoço tentavam ficar juntos ou jogar ping pong."</p></div>
+</div></div>
+
+<!-- QUIZ -->
+<div id="page-quiz" class="page">
+<div class="hero"><div class="hbadge">🎯 Quiz Geral</div><h1>Teste seu<br><span>Conhecimento</span></h1><p>Perguntas sobre todo o conteúdo do SBV — checklist, sistema, orientações finais, erros de auditoria e muito mais.</p></div>
+<div class="ct">
+<div id="qstart">
+<div class="qsc"><h3>🎯 Quiz Completo — SBV</h3><p>20 perguntas cobrindo todos os 7 módulos. Respostas embaralhadas a cada vez. Feedback explicativo em cada questão.</p><button class="btn bl" onclick="sq('all')" style="margin-top:6px">Iniciar Quiz Completo →</button></div>
+<div class="sd"><span>Ou escolha um módulo</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px">
+<div class="card" style="cursor:pointer;text-align:center;padding:14px" onclick="sq('m1')"><div style="font-size:22px;margin-bottom:5px">👋</div><div class="ct2" style="font-size:12px">Quiz Módulo 1</div><div class="cs">Apresentação</div></div>
+<div class="card" style="cursor:pointer;text-align:center;padding:14px;border-color:var(--verde)" onclick="sq('m2')"><div style="font-size:22px;margin-bottom:5px">✅</div><div class="ct2" style="font-size:12px">Quiz Módulo 2</div><div class="cs">Dados</div></div>
+<div class="card" style="cursor:pointer;text-align:center;padding:14px;border-color:var(--roxo)" onclick="sq('m3')"><div style="font-size:22px;margin-bottom:5px">🏢</div><div class="ct2" style="font-size:12px">Quiz Módulo 3</div><div class="cs">Vaga</div></div>
+<div class="card" style="cursor:pointer;text-align:center;padding:14px;border-color:var(--lar2)" onclick="sq('m4')"><div style="font-size:22px;margin-bottom:5px">📅</div><div class="ct2" style="font-size:12px">Quiz Módulo 4</div><div class="cs">Entrevista</div></div>
+<div class="card" style="cursor:pointer;text-align:center;padding:14px;border-color:var(--lima)" onclick="sq('m5')"><div style="font-size:22px;margin-bottom:5px">⭐</div><div class="ct2" style="font-size:12px">Quiz Módulo 5</div><div class="cs">Orientações Finais</div></div>
+<div class="card" style="cursor:pointer;text-align:center;padding:14px;border-color:var(--verde)" onclick="sq('m6')"><div style="font-size:22px;margin-bottom:5px">💡</div><div class="ct2" style="font-size:12px">Quiz Módulo 6</div><div class="cs">Qualidade</div></div>
+<div class="card" style="cursor:pointer;text-align:center;padding:14px;border-color:var(--lar)" onclick="sq('m7')"><div style="font-size:22px;margin-bottom:5px">💻</div><div class="ct2" style="font-size:12px">Quiz Módulo 7</div><div class="cs">Sistema</div></div>
+</div></div>
+<div id="qview" class="qw" style="display:none">
+<div class="qprog" id="qprog"></div>
+<div class="qc"><span id="qnum">1</span> de <span id="qtot">0</span> · <span id="qsi">0 pts</span></div>
+<div class="qt" id="qtopic"></div>
+<div class="qq" id="qtext"></div>
+<div class="qo" id="qopts"></div>
+<div class="fb" id="fb"><div class="fbt" id="fbt"></div><div class="fbd" id="fbd"></div></div>
+<button class="btn bp" id="btnNext" style="display:none" onclick="nq()">Próxima →</button>
+</div>
+<div id="rview" style="display:none">
+<div class="rb">
+<span class="re" id="re">🏆</span>
+<div class="rs"><span id="rok">0</span>/<span id="rtot">0</span></div>
+<div class="rl" id="rl"></div><p class="rm" id="rm"></p>
+<div class="bk"><div class="bkt">Desempenho por tema</div><div id="bdlist"></div></div>
+<div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap">
+<button class="btn bo bs" onclick="resetQ()">Ver módulos</button>
+<button class="btn bl bs" onclick="sq(lqm)">Refazer 🔄</button>
+</div></div></div>
+</div></div>
+
+</div><!-- /main -->
+<script>
+const AQ=[
+{m:'m1',t:'Apresentação',q:'Quais são os 3 elementos da apresentação do consultor?',o:['Nome, cargo (Especialista) e de onde fala (Nube)','Nome, e-mail e telefone','Nome, empresa e horário','Nome, vaga e disponibilidade'],c:0,f:'A apresentação tem 3 elementos: seu nome, seu cargo (Especialista do Nube) e de onde você fala.'},
+{m:'m1',t:'Apresentação',q:'Como deve ser o tom durante a apresentação da vaga?',o:['Animado, confiante e com sorriso na voz','Formal e técnico, sem emoções','Rápido e direto para poupar tempo','Neutro para não criar expectativas'],c:0,f:'O consultor referência coloca sorriso na voz! O candidato sente a energia mesmo por telefone.'},
+{m:'m1',t:'Apresentação',q:'O que deve conter o resumo da vaga?',o:['Bairro + cidade + dica / Área / Jornada / Benefícios','Apenas salário e horário','Nome da empresa, endereço e CNPJ','Requisitos técnicos e experiência'],c:0,f:'O resumo tem 4 elementos: localização (bairro+cidade+dica), área, jornada e benefícios. Termine convidando o candidato!'},
+{m:'m2',t:'Confirmação de Dados',q:'Quais dados são confirmados no Link VERDE?',o:['Nome, e-mail e telefone','Nome completo, idade e e-mail','E-mail, telefone e CEP','Nome, CPF e telefone'],c:0,f:'O Link Verde tem apenas 3 campos: Nome, E-mail e Telefone.'},
+{m:'m2',t:'Confirmação de Dados',q:'Quantos campos obrigatórios tem o Link Vermelho?',o:['10 campos','5 campos','7 campos','3 campos'],c:0,f:'São 10 campos: Nome completo, Idade, CEP/cidade, E-mail, Telefone, Nome do curso, Semestre, Instituição+campus, Conclusão e Período.'},
+{m:'m2',t:'Confirmação de Dados',q:'Qual parte do Link Vermelho é mais esquecida?',o:['Os dados de escolaridade (curso, semestre, instituição, campus, conclusão, período)','O telefone do candidato','O CEP e cidade','O e-mail'],c:0,f:'A escolaridade tem 6 sub-campos! A parte mais complexa e mais esquecida do Link Vermelho.'},
+{m:'m2',t:'Confirmação de Dados',q:'O que verificar ANTES de confirmar os dados pessoais?',o:['Perfil compatível com a vaga e ausência de restrições','Disponibilidade de horário','Se o candidato tem e-mail válido','Se já participou de outros PSs'],c:0,f:'Antes de confirmar dados: 1) Perfil compatível com requisitos e 2) Sem restrições no cadastro.'},
+{m:'m3',t:'Informações da Vaga',q:'Por que o nome da empresa é um dos erros mais frequentes?',o:['O consultor foca no agendamento e deixa as infos da empresa para depois','O sistema não exibe o nome automaticamente','O nome é confidencial até a entrevista','O candidato não precisa saber antes'],c:0,f:'O objetivo percebido é "agendar". Nome, ramo e porte ficam para depois — e são esquecidos. Sempre passe ANTES de confirmar!'},
+{m:'m3',t:'Informações da Vaga',q:'Além do nome, o que mais é obrigatório sobre a empresa?',o:['Ramo de atuação e porte da empresa','CNPJ e endereço completo','Nome do responsável de RH','Faturamento e tempo de mercado'],c:0,f:'Nome + Ramo + Porte. Os três juntos! Todos aparecem no checklist e nas auditorias como erros.'},
+{m:'m3',t:'Informações da Vaga',q:'O que deve ser informado sobre as atividades do estágio?',o:['O que o estagiário fará no dia a dia, de forma clara e animada','Apenas o cargo e o departamento','As metas e resultados esperados','O organograma da empresa'],c:0,f:'As atividades devem ser descritas de forma clara e animada, ajudando o candidato a imaginar o dia a dia.'},
+{m:'m4',t:'Entrevista & Política',q:'Por que os estagiários esquecem de passar a política de faltas?',o:['Parece um tema constrangedor e é evitado inconscientemente','Não é importante para o candidato','O sistema envia automaticamente','É item opcional do checklist'],c:0,f:'Adolescentes evitam temas que parecem ameaçadores. Sem um script natural para introduzir, o item é pulado.'},
+{m:'m4',t:'Entrevista & Política',q:'Qual é a melhor forma de introduzir a política de faltas?',o:['"Antes de confirmar, preciso te passar uma informação importante sobre o processo..."','"Se você faltar, será desclassificado."','"Agora vou ler as regras do PS."','Não falar para não assustar'],c:0,f:'Uma frase de transição natural tira o peso da regra. O candidato fica mais receptivo e você cumpre o checklist!'},
+{m:'m4',t:'Entrevista & Política',q:'Quais formatos de entrevista devem ser identificados e informados?',o:['Presencial, Remota, Vídeo entrevista, Provas e/ou questionários','Apenas presencial ou remota','Somente entrevista com RH','Qualquer formato sem especificar como acessar'],c:0,f:'Todos os 4 formatos devem ser identificados e o candidato deve saber COMO acessar cada um.'},
+{m:'m4',t:'Entrevista & Política',q:'Qual deve ser o tom ao confirmar o agendamento?',o:['Entusiasmado e encorajador, transmitindo confiança','Neutro e burocrático','Rápido e direto','Formal e técnico'],c:0,f:'O agendamento é um momento de celebração! Transmita entusiasmo — o candidato deu um passo importante.'},
+{m:'m5',t:'Orientações Finais',q:'O que significa o mnemônico C·A·M·D·R·I·S?',o:['Confirmação, Alteração, Minhas entrevistas, Documentos, Redes sociais, Indica APP, Salva contato','Confirmação, Agendamento, Mensagem, Dados, Resultado, Indicação, Satisfação','Contato, Alteração, Minhas entrevistas, Documentos, Redes, Informação, Sucesso','Confirmação, Atendimento, Metas, Dados, Redes, Indicação, Saldo'],c:0,f:'C·A·M·D·R·I·S = Confirmação (e-mail/SMS) · Alteração (e-mail/SMS) · Minhas entrevistas · Documentos · Redes sociais · Indica APP · Salva contato.'},
+{m:'m5',t:'Orientações Finais',q:'O que deve ser dito sobre e-mail e SMS nas Orientações Finais?',o:['E-mail e SMS de CONFIRMAÇÃO e e-mail e SMS de ALTERAÇÃO — os dois!','Apenas o e-mail de confirmação','Apenas o SMS de confirmação','Nada — o candidato recebe automaticamente'],c:0,f:'São dois momentos: C = e-mail/SMS de confirmação e A = e-mail/SMS de alteração. Ambos devem ser mencionados!'},
+{m:'m5',t:'Orientações Finais',q:'Quais documentos o candidato deve levar ao PS?',o:['Carta de encaminhamento, CV impresso, documento com foto e traje adequado','Apenas RG e CPF','CV digital e comprovante de escolaridade','Nenhum — o Nube envia digitalmente'],c:0,f:'São 4 itens: Carta de encaminhamento, CV impresso e atualizado, Documento com foto (RG/CNH) e Traje adequado.'},
+{m:'m5',t:'Orientações Finais',q:'Em ligações RECEPTIVAS, o que é feito antes de encerrar?',o:['Pesquisa de satisfação','Confirmação dos dados','Oferta de outras vagas','Transferência para supervisor'],c:0,f:'Ligações RECEPTIVAS: pesquisa de satisfação antes de encerrar. Nas ativas, não é necessário.'},
+{m:'m6',t:'Qualidade & Português',q:'Qual das alternativas é CORRETA quanto ao uso do português?',o:['"Vou verificar agora mesmo para você!"','"Vou estar verificando agora mesmo para você!"','"Estarei verificando em breve."','"Vai ser verificado pelo sistema."'],c:0,f:'Gerundismo = uso excessivo de "estar + gerúndio". O correto é o futuro simples: "vou verificar", "vou enviar".'},
+{m:'m6',t:'Qualidade & Português',q:'Como se diz corretamente ao falar da empresa?',o:['"do Nube" — nunca "da Nube"','"da Nube" — é o nome oficial','"o Nube" ou "a Nube" — tanto faz','"O Sistema Nube"'],c:0,f:'"Nube" é substantivo masculino. O correto é "do Nube", "no Nube", "pelo Nube". Nunca "da Nube"!'},
+{m:'m6',t:'Qualidade & Português',q:'O que diferencia um consultor referência de um consultor comum?',o:['Sorriso na voz, checklist completo, dicas personalizadas e uso do nome do candidato','Falar mais rápido para atender mais','Saber mais sobre o sistema que o procedimento','Encerrar antes para passar para o próximo'],c:0,f:'O consultor referência: coloca sorriso na voz, segue o checklist na ordem, personaliza dicas de PS e usa o nome do candidato.'},
+{m:'m7',t:'Sistema & Ferramentas',q:'Qual e-mail é usado para casos de vídeo entrevista?',o:['videoentrevista@nube','estt@nube','aprendizes@saberaprendizes.org.br','contratos@nube'],c:0,f:'videoentrevista@nube é específico para vídeo entrevistas. estt@nube é para estágio especial.'},
+{m:'m7',t:'Sistema & Ferramentas',q:'Qual é a regra para estagiários menores de idade?',o:['Só podem participar de vagas próximas ou em cidades limítrofes','Podem participar de qualquer vaga normalmente','Precisam de autorização dos pais mas qualquer cidade','Não podem ser encaminhados pelo Nube'],c:0,f:'Menores de idade só podem ser encaminhados para vagas próximas ou em cidades limítrofes — regra da lei de aprendiz.'},
+{m:'m7',t:'Sistema & Ferramentas',q:'Com quantos minutos de antecedência o consultor deve logar?',o:['2 minutos antes','5 minutos antes','10 minutos antes','No horário exato'],c:0,f:'O padrão é logar 2 minutos antes do início do turno para garantir estar pronto ao começar.'},
+];
+
+let ql=[],qi=0,qs=0,qa=false,qd=[],tm={},lqm='all',tot=0;
+
+function sp(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>{n.classList.remove('active');if(n.getAttribute('onclick')?.includes("'"+id+"'"))n.classList.add('active')});
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window.innerWidth<=768)document.getElementById('sidebar').classList.remove('open');
+}
+
+function smq(m){sp('quiz');setTimeout(()=>sq(m),120);}
+
+function sq(mode){
+  lqm=mode;
+  ql=(mode==='all'?AQ:AQ.filter(q=>q.m===mode)).sort(()=>Math.random()-.5);
+  qi=0;qs=0;qa=false;qd=[];tm={};
+  document.getElementById('qstart').style.display='none';
+  document.getElementById('rview').style.display='none';
+  document.getElementById('qview').style.display='block';
+  document.getElementById('qtot').textContent=ql.length;
+  rq();
+}
+
+function rq(){
+  const q=ql[qi];
+  document.getElementById('qnum').textContent=qi+1;
+  document.getElementById('qtopic').textContent=q.t;
+  document.getElementById('qtext').textContent=q.q;
+  document.getElementById('fb').className='fb';
+  document.getElementById('btnNext').style.display='none';
+  document.getElementById('qsi').textContent=qs+' pts';
+  qa=false;
+  const prog=document.getElementById('qprog');
+  prog.innerHTML=ql.map((_,i)=>{let c='qd';if(i<qd.length)c+=' '+(qd[i]?'ok':'ko');else if(i===qi)c+=' cur';return`<div class="${c}"></div>`;}).join('');
+  const L=['A','B','C','D'],ia=[0,1,2,3].sort(()=>Math.random()-.5),cn=ia.indexOf(q.c);
+  document.getElementById('qopts').innerHTML=ia.map((orig,ni)=>`<button class="opt" onclick="po(this,${ni===cn},${cn})"><span class="ol">${L[ni]}</span>${q.o[orig]}</button>`).join('');
+}
+
+function po(btn,ok,ci){
+  if(qa)return;qa=true;
+  const q=ql[qi];
+  document.querySelectorAll('.opt').forEach((b,i)=>{b.disabled=true;if(i===ci)b.classList.add('correct');});
+  const pts=ok?10:0;qs+=pts;tot+=pts;qd.push(ok);
+  if(!tm[q.t])tm[q.t]={ok:0,tot:0};
+  tm[q.t].tot++;
+  if(ok){btn.classList.add('correct');tm[q.t].ok++;}else btn.classList.add('wrong');
+  const fb=document.getElementById('fb');
+  document.getElementById('fbt').textContent=ok?'✅ Correto! +10 pontos':'❌ Não foi dessa vez...';
+  document.getElementById('fbd').textContent=q.f;
+  fb.className='fb '+(ok?'ok':'ko')+' show';
+  document.getElementById('btnNext').style.display='inline-flex';
+  document.getElementById('qsi').textContent=qs+' pts';
+  document.getElementById('snum').textContent=tot;
+  document.getElementById('sbar').style.width=Math.min(100,tot/2)+'%';
+  if(ok)toast('🔥 +10 pontos!');
+}
+
+function nq(){qi++;if(qi>=ql.length)sr();else rq();window.scrollTo({top:0,behavior:'smooth'});}
+
+function sr(){
+  document.getElementById('qview').style.display='none';
+  document.getElementById('rview').style.display='block';
+  const n=ql.length,p=qs/(n*10)*100;
+  let e,l,m;
+  if(p>=90){e='🏆';l='Especialista Nube!';m='Incrível! Você domina o checklist. Pode ir para a fila com total confiança!';}
+  else if(p>=70){e='⭐';l='Muito bem!';m='Quase lá! Revise os itens marcados em vermelho e você chega lá.';}
+  else if(p>=50){e='💪';l='Continue praticando!';m='Você está no caminho certo. Reveja os módulos e tente novamente!';}
+  else{e='📚';l='Vamos revisar juntos!';m='Não desanime! Reveja o conteúdo com calma — cada detalhe do checklist faz diferença na auditoria.';}
+  document.getElementById('re').textContent=e;
+  document.getElementById('rok').textContent=qs/10;
+  document.getElementById('rtot').textContent=n;
+  document.getElementById('rl').textContent=l;
+  document.getElementById('rm').textContent=m;
+  document.getElementById('bdlist').innerHTML=Object.entries(tm).map(([t,{ok,tot:tt}])=>{
+    const pp=ok/tt*100,col=pp>=80?'var(--verde)':pp>=50?'var(--lar2)':'#e53935';
+    return`<div class="bki"><div style="flex:1;min-width:0"><div style="font-size:10.5px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t}</div><div class="bkt2"><div class="bkf" style="width:${pp}%;background:${col}"></div></div></div><span style="font-size:11px;font-weight:700;margin-left:8px;color:${col}">${ok}/${tt}</span></div>`;
+  }).join('');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetQ(){document.getElementById('qview').style.display='none';document.getElementById('rview').style.display='none';document.getElementById('qstart').style.display='block';}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+</script>
+</body>
+</html>
