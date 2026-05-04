@@ -147,6 +147,8 @@ body{font-family:'Poppins',sans-serif;background:var(--cinza);color:var(--preto)
 <a class="ni" onclick="sp('turma')" href="#"><span class="ni-ic">👥</span>Perfis da Turma<span class="ni-dot"></span></a>
 <div class="ns">Quiz</div>
 <a class="ni" onclick="sp('quiz')" href="#"><span class="ni-ic">🎯</span>Quiz Geral<span class="ni-dot"></span></a>
+<div class="ns">Gestora</div>
+<a class="ni" onclick="sp('gestora')" href="#"><span class="ni-ic">📊</span>Painel de Resultados<span class="ni-dot"></span></a>
 <div class="sb-score"><div class="sn" id="snum">0</div><div class="sl">pontos acumulados</div><div class="sb-track"><div class="sb-fill" id="sbar" style="width:0%"></div></div></div>
 </nav>
 <button id="hbg" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
@@ -406,6 +408,34 @@ body{font-family:'Poppins',sans-serif;background:var(--cinza);color:var(--preto)
 </div></div>
 
 <!-- QUIZ -->
+<!-- GESTORA PAGE -->
+<div id="page-gestora" class="page">
+<div class="hero"><div class="hbadge">📊 Gestora</div><h1>Painel de<br><span>Resultados</span></h1><p>Acompanhe o desempenho de cada estagiário nos quizzes.</p></div>
+<div class="ct">
+<div id="g-login">
+  <div class="card">
+    <div class="ch"><div class="ci" style="background:#EEEDFE">🔒</div><div><div class="ct2">Acesso restrito</div><div class="cs">Digite a senha de gestora</div></div></div>
+    <input type="password" id="g-pass" placeholder="Senha" style="width:100%;padding:10px 14px;border-radius:9px;border:2px solid var(--borda);font-family:'Poppins',sans-serif;font-size:14px;margin:10px 0" onkeydown="if(event.key==='Enter')gLogin()">
+    <button class="btn bl" onclick="gLogin()">Entrar →</button>
+    <div id="g-err" style="color:#e53935;font-size:12px;margin-top:8px;display:none">Senha incorreta.</div>
+  </div>
+</div>
+<div id="g-panel" style="display:none">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div style="font-size:13px;font-weight:700;color:rgba(26,26,26,.5)">TODAS AS TENTATIVAS</div>
+    <button class="btn bo bs" onclick="gLoad()">↻ Atualizar</button>
+  </div>
+  <div id="g-loading" style="text-align:center;padding:32px;color:rgba(26,26,26,.4);font-size:13px">Carregando...</div>
+  <div id="g-table" style="display:none">
+    <table class="et" id="g-data-table">
+      <thead><tr><th>Nome</th><th>Módulo</th><th>Acertos</th><th>Pontos</th><th>Data/Hora</th></tr></thead>
+      <tbody id="g-tbody"></tbody>
+    </table>
+    <div id="g-empty" style="display:none;text-align:center;padding:32px;color:rgba(26,26,26,.4);font-size:13px">Nenhum resultado ainda.</div>
+  </div>
+</div>
+</div></div>
+
 <div id="page-quiz" class="page">
 <div class="hero"><div class="hbadge">🎯 Quiz Geral</div><h1>Teste seu<br><span>Conhecimento</span></h1><p>Perguntas sobre todo o conteúdo do SBV — checklist, sistema, orientações finais, erros de auditoria e muito mais.</p></div>
 <div class="ct">
@@ -553,6 +583,111 @@ function sr(){
 
 function resetQ(){document.getElementById('qview').style.display='none';document.getElementById('rview').style.display='none';document.getElementById('qstart').style.display='block';}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+
+// ── NOME DO ALUNO ──
+let nomeAluno='';
+function smq(m){
+  sp('quiz');
+  setTimeout(()=>{
+    const n=prompt('Digite seu nome completo para registrar seu resultado:');
+    if(!n||!n.trim()){alert('Por favor informe seu nome.');return;}
+    nomeAluno=n.trim();
+    sq(m);
+  },120);
+}
+
+// Override do sq direto da página quiz
+const _sqOrig=sq;
+function sqComNome(mode){
+  if(!nomeAluno){
+    const n=prompt('Digite seu nome completo para registrar seu resultado:');
+    if(!n||!n.trim()){alert('Por favor informe seu nome.');return;}
+    nomeAluno=n.trim();
+  }
+  _sqOrig(mode);
+}
+
+// Substituir botões do qstart para pedir nome
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('[onclick^="sq("]').forEach(el=>{
+    const m=el.getAttribute('onclick').match(/sq\('?([^')]+)'?\)/)?.[1];
+    if(m) el.setAttribute('onclick',`sqComNome('${m}')`);
+  });
+});
+
+// ── SALVAR RESULTADO ──
+const BIN_ID='nube-treinamento-sbv';
+const BIN_KEY='$2a$10$XplaceholderKeyForDemo1234567890abc';
+
+async function salvarResultado(nome,modulo,acertos,total,pontos){
+  const entry={nome,modulo,acertos,total,pontos,data:new Date().toLocaleString('pt-BR')};
+  try{
+    // Tenta buscar bin existente
+    let res=await fetch(`https://api.jsonbin.io/v3/b/${window._binId||''}`,{headers:{'X-Master-Key':window._binKey||''}});
+    let data=[];
+    if(window._binId&&res.ok){
+      const j=await res.json();
+      data=j.record||[];
+    }
+    data.push(entry);
+    if(window._binId){
+      await fetch(`https://api.jsonbin.io/v3/b/${window._binId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':window._binKey||''},body:JSON.stringify(data)});
+    }
+  }catch(e){}
+  // Fallback: salva local
+  try{
+    const local=JSON.parse(localStorage.getItem('nube_results')||'[]');
+    local.push(entry);
+    localStorage.setItem('nube_results',JSON.stringify(local));
+  }catch(e){}
+}
+
+// Override sr para salvar
+const _srOrig=sr;
+sr=function(){
+  _srOrig();
+  const n=ql.length;
+  const acertos=qs/10;
+  salvarResultado(nomeAluno||'Anônimo',lqm==='all'?'Completo':'Módulo '+lqm,acertos,n,qs);
+};
+
+// ── PAINEL GESTORA ──
+const SENHA_GESTORA='nube2026';
+
+function gLogin(){
+  const p=document.getElementById('g-pass').value;
+  if(p===SENHA_GESTORA){
+    document.getElementById('g-login').style.display='none';
+    document.getElementById('g-panel').style.display='block';
+    gLoad();
+  }else{
+    document.getElementById('g-err').style.display='block';
+  }
+}
+
+function gLoad(){
+  document.getElementById('g-loading').style.display='block';
+  document.getElementById('g-table').style.display='none';
+  // Carrega do localStorage
+  setTimeout(()=>{
+    const data=JSON.parse(localStorage.getItem('nube_results')||'[]');
+    document.getElementById('g-loading').style.display='none';
+    document.getElementById('g-table').style.display='block';
+    if(!data.length){
+      document.getElementById('g-empty').style.display='block';
+      document.getElementById('g-data-table').style.display='none';
+      return;
+    }
+    document.getElementById('g-empty').style.display='none';
+    document.getElementById('g-data-table').style.display='table';
+    const sorted=[...data].reverse();
+    document.getElementById('g-tbody').innerHTML=sorted.map(r=>{
+      const pct=Math.round(r.acertos/r.total*100);
+      const cor=pct>=80?'var(--verde)':pct>=50?'var(--lar2)':'#e53935';
+      return`<tr><td>${r.nome}</td><td>${r.modulo}</td><td style="color:${cor};font-weight:700">${r.acertos}/${r.total} (${pct}%)</td><td>${r.pontos} pts</td><td style="color:rgba(26,26,26,.5)">${r.data}</td></tr>`;
+    }).join('');
+  },400);
+}
 </script>
 </body>
 </html>
